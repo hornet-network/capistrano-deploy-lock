@@ -140,7 +140,7 @@ def fetch_deploy_lock
     on roles(fetch(:deploy_lock_roles)), in: :parallel do |host|
       if test("[ -f #{fetch(:deploy_lock_file)} ]")
         output = capture "cat #{fetch(:deploy_lock_file)}"
-        set :deploy_lock, YAML.load(output)
+        set :deploy_lock, YAML.load(output, permitted_classes: [Time, Symbol])
       else
         # no deploy lock was found on server
         next
